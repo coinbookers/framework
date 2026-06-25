@@ -62,4 +62,9 @@ print(
     )
 )
 
-
+# Optional broadcast
+# broadcast_hash = client.eth.send_raw_transaction(
+#     signed_tx.raw_transaction
+# )
+# print(broadcast_hash.hex())
+```
