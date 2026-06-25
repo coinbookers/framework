@@ -1,0 +1,65 @@
+```python id="h2vc84"
+from web3 import Web3
+import json
+from datetime import datetime
+
+RPC_URL = "https://mainnet.base.org"
+PRIVATE_KEY = "YOUR_PRIVATE_KEY"
+
+client = Web3(
+    Web3.HTTPProvider(RPC_URL)
+)
+
+account = client.eth.account.from_key(
+    PRIVATE_KEY
+)
+
+metadata = {
+    "network": "base",
+    "domain": "area",
+    "access": "control",
+    "currency_type": "fiat"
+}
+
+contract_address = Web3.to_checksum_address(
+    "0x1234567890123456789012345678901234567890"
+)
+
+nonce = client.eth.get_transaction_count(
+    account.address
+)
+
+transaction = {
+    "to": contract_address,
+    "value": 0,
+    "gas": 145000,
+    "gasPrice": client.eth.gas_price,
+    "nonce": nonce,
+    "chainId": 8453,
+    "data": "0x"
+}
+
+signed_tx = client.eth.account.sign_transaction(
+    transaction,
+    PRIVATE_KEY
+)
+
+report = {
+    "address": account.address,
+    "network": metadata["network"],
+    "area": metadata["domain"],
+    "control": metadata["access"],
+    "fiat": metadata["currency_type"],
+    "timestamp": datetime.utcnow().isoformat(),
+    "tx_hash": signed_tx.hash.hex()
+}
+
+print("Contract interaction signed")
+print(
+    json.dumps(
+        report,
+        indent=2
+    )
+)
+
+
